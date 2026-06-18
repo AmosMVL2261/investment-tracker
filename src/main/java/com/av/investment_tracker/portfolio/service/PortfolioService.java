@@ -2,6 +2,7 @@ package com.av.investment_tracker.portfolio.service;
 
 import com.av.investment_tracker.asset.model.Asset;
 import com.av.investment_tracker.asset.service.AssetService;
+import com.av.investment_tracker.exception.PortfolioEntryNotFoundException;
 import com.av.investment_tracker.portfolio.dto.PortfolioEntryRequest;
 import com.av.investment_tracker.portfolio.dto.PortfolioEntryResponse;
 import com.av.investment_tracker.portfolio.dto.PortfolioSummaryResponse;
@@ -90,7 +91,7 @@ public class PortfolioService {
 
     public PortfolioEntryResponse addEntry(Long userId, PortfolioEntryRequest request) {
         if(portfolioEntryRepository.existsByUserIdAndAssetSymbol(userId, request.getSymbol().toUpperCase())){
-            throw new RuntimeException("Asset already exists i portfolio: "+request.getSymbol());
+            throw new RuntimeException("Asset already exists in portfolio: "+request.getSymbol());
         }
 
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -110,7 +111,7 @@ public class PortfolioService {
 
     public PortfolioEntryResponse updateEntry(Long userId, Long entryId, PortfolioEntryRequest request) {
             PortfolioEntry entry = portfolioEntryRepository.findById(entryId).orElseThrow(
-                    () -> new RuntimeException("Portfolio entry not found")
+                    () -> new PortfolioEntryNotFoundException(entryId)
             );
 
             if(!entry.getUser().getId().equals(userId)){
@@ -125,7 +126,7 @@ public class PortfolioService {
 
     public  void deleteEntry(Long userId, Long entryId) {
         PortfolioEntry entry = portfolioEntryRepository.findById(entryId).orElseThrow(
-                () -> new RuntimeException("Portfolio entry not found")
+                () -> new PortfolioEntryNotFoundException(entryId)
         );
 
         if(!entry.getUser().getId().equals(userId)) {
@@ -138,7 +139,7 @@ public class PortfolioService {
 
     public PortfolioEntryResponse getEntry(Long userId, Long entryId) {
         PortfolioEntry entry = portfolioEntryRepository.findById(entryId)
-                .orElseThrow(() -> new RuntimeException("Portfolio entry not found"));
+                .orElseThrow(() -> new PortfolioEntryNotFoundException(entryId));
 
         if (!entry.getUser().getId().equals(userId)) {
             throw new RuntimeException("Unauthorized");

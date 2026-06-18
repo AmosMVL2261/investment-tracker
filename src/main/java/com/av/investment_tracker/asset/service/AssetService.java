@@ -4,6 +4,8 @@ import com.av.investment_tracker.asset.dto.AssetResponse;
 import com.av.investment_tracker.asset.model.Asset;
 import com.av.investment_tracker.asset.model.AssetType;
 import com.av.investment_tracker.asset.repository.AssetRepository;
+import com.av.investment_tracker.exception.AssetNotFoundException;
+import com.av.investment_tracker.exception.SymbolNotFoundInMarketException;
 import com.av.investment_tracker.price.dto.PriceResponse;
 import com.av.investment_tracker.price.service.PriceService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,7 @@ public class AssetService {
         PriceResponse priceResponse = priceService.getCurrentPrice(symbol);
 
         if(priceResponse == null || priceResponse.getSymbol() == null) {
-            throw new RuntimeException("Symbol not found in market: "+symbol);
+            throw new SymbolNotFoundInMarketException(symbol);
         }
 
         Asset asset = Asset.builder()
@@ -48,7 +50,7 @@ public class AssetService {
 
     public AssetResponse getAssetBySymbol(String symbol) {
         Asset asset = assetRepository.findBySymbol(symbol.toUpperCase())
-                                    .orElseThrow(() -> new RuntimeException("Asset not found: "+symbol));
+                                    .orElseThrow(() -> new AssetNotFoundException(symbol));
         return mapToResponse(asset);
     }
 
