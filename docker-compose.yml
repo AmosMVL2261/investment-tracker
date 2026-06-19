@@ -11,5 +11,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  app:
+    build: .
+    container_name: investment-tracker-app
+    depends_on:
+      - db
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      ALPHAVANTAGE_API_KEY: ${ALPHAVANTAGE_API_KEY}
+      ALPHAVANTAGE_BASE_URL: ${ALPHAVANTAGE_BASE_URL}
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+
 volumes:
   postgres_data:
