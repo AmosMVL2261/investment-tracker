@@ -1,6 +1,7 @@
 package com.av.investment_tracker.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,6 +56,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SymbolNotFoundInMarketException.class)
     public ResponseEntity<ErrorResponse> handleSymbolNotFoundInMarketException(SymbolNotFoundInMarketException ex) {
         return ResponseEntity.status(422).body(new ErrorResponse(422, ex.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ErrorResponse(
+                        HttpStatus.CONFLICT.value(),
+                        "Cannot delete this resource because it has associated records"
+                )
+        );
     }
 
 }

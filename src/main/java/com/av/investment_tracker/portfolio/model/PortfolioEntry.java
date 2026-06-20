@@ -1,12 +1,15 @@
 package com.av.investment_tracker.portfolio.model;
 
 import com.av.investment_tracker.asset.model.Asset;
+import com.av.investment_tracker.transaction.model.Transaction;
 import com.av.investment_tracker.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "portfolio_entries", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "asset_id"}))
@@ -40,6 +43,9 @@ public class PortfolioEntry {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "portfolioEntry", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactions = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
