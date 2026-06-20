@@ -2,6 +2,7 @@ package com.av.investment_tracker.portfolio.controller;
 
 import com.av.investment_tracker.portfolio.dto.PortfolioEntryRequest;
 import com.av.investment_tracker.portfolio.dto.PortfolioEntryResponse;
+import com.av.investment_tracker.portfolio.dto.PortfolioMetricsResponse;
 import com.av.investment_tracker.portfolio.dto.PortfolioSummaryResponse;
 import com.av.investment_tracker.portfolio.service.PortfolioService;
 import com.av.investment_tracker.security.SecurityUtils;
@@ -45,6 +46,11 @@ public class PortfolioController {
     public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
         portfolioService.deleteEntry(SecurityUtils.getAuthenticatedUserId(), id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/metrics")
+    public ResponseEntity<PortfolioMetricsResponse> getMetrics() {
+        return ResponseEntity.ok(portfolioService.getMetrics(SecurityUtils.getAuthenticatedUserId()));
     }
 
 }
