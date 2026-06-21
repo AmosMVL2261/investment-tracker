@@ -87,6 +87,17 @@ http://localhost:8080/swagger-ui.html
 |--------|----------|-------------|---------------|
 | GET | `/prices/{symbol}` | Get current market price for a symbol | Yes |
 
+### Transactions
+| Method | Endpoint | Description | Auth required |
+|--------|----------|-------------|---------------|
+| GET | `/portfolio/{id}/transactions` | Get transaction history for a portfolio entry | Yes |
+| POST | `/portfolio/{id}/transactions` | Record a buy or sell transaction | Yes |
+
+### Metrics
+| Method | Endpoint | Description | Auth required |
+|--------|----------|-------------|---------------|
+| GET | `/portfolio/metrics` | Get portfolio metrics and asset distribution | Yes |
+
 ## Authentication
 
 All protected endpoints require a Bearer token in the `Authorization` header:
@@ -103,8 +114,10 @@ You can obtain a token by registering or logging in. The Swagger UI includes an 
 - Asset symbols are validated against the Alpha Vantage API. Only real market symbols are accepted.
 - The free tier of Alpha Vantage allows 25 requests per day. Price caching is implemented to optimize usage.
 
-## Future Plans (Phase 2)
+## Future Plans
 
-- Transaction history (buy/sell records per position)
-- Portfolio metrics (best performing asset, distribution by type)
-- More comprehensive integration tests
+- Soft delete for portfolio entries to preserve transaction history
+- Email notifications for significant price changes
+- PDF report generation
+- OAuth2 authentication support
+- Frontend client

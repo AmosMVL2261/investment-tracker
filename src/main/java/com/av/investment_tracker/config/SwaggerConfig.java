@@ -16,18 +16,17 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Investment Tracker API")
-                        .description("API para rastrear y monitorear inversiones personales")
+                        .description("API for tracking and monitoring personal investments in stocks, cryptocurrencies and ETFs")
                         .version("1.0.0")
                 )
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components()
                         .addSecuritySchemes("Bearer Authentication", new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
-                        .description("Ingresa tu JWT token")
-                )
-        );
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .description("Enter your JWT token")
+                        )
+                );
     }
-
 }
